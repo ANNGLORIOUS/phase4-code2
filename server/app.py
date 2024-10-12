@@ -12,10 +12,11 @@ db.init_app(app)
 
 api = Api(app)
 
+#Define the homepage.
 @app.route('/')
 def home():
     return make_response("""
-    <h1>Welcome to the Late Show API</h1>
+    <h1>Welcome to the Late Show </h1>
     <p>Use the following endpoints to interact with the API:</p>
     <ul>
         <li><strong>GET /episodes</strong>: Retrieve all episodes</li>
@@ -26,12 +27,14 @@ def home():
     """, 200)
 
 class Episodes(Resource):
-    def get(self):
+    #retrive all episodes in the database and return them as a json response.
+    def get_episodes(self):
         episodes = [episode.to_dict() for episode in Episode.query.all()]
         return make_response(jsonify(episodes), 200)
 
 class EpisodeById(Resource):
-    def get(self, id):
+    #retrieve a specific episode by id from the database and return it as a json response.
+    def get_episodesid(self, id):
         episode = Episode.query.get(id)
         if episode:
             episode_dict = episode.to_dict()
@@ -41,12 +44,14 @@ class EpisodeById(Resource):
             return make_response(jsonify({"error": "Episode not found"}), 404)
 
 class Guests(Resource):
-    def get(self):
+    #retrive all guests in the database and return them as a json response.
+    def get_guests(self):
         guests = [guest.to_dict() for guest in Guest.query.all()]
         return make_response(jsonify(guests), 200)
 
 class Appearances(Resource):
-    def post(self):
+    #add a new appearance to the database and return the new appearance as a json response.
+    def post_appearances(self):
         try:
             data = request.get_json()
             new_appearance = Appearance(
@@ -60,6 +65,7 @@ class Appearances(Resource):
         except Exception as e:
             return make_response(jsonify({"errors": [str(e)]}), 400)
 
+#define the endpoints and their corresponding resources.
 api.add_resource(Episodes, '/episodes')
 api.add_resource(EpisodeById, '/episodes/<int:id>')
 api.add_resource(Guests, '/guests')
