@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy 
 from sqlalchemy.orm import validates 
-from sqlalchemy.ext.declarative import declarative_base
+# from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy_serializer import SerializerMixin
 
 db = SQLAlchemy()
