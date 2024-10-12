@@ -17,13 +17,7 @@ api = Api(app)
 def home():
     return make_response("""
     <h1>Welcome to the Late Show </h1>
-    <p>Use the following endpoints to interact with the API:</p>
-    <ul>
-        <li><strong>GET /episodes</strong>: Retrieve all episodes</li>
-        <li><strong>GET /episodes/&lt;id&gt;</strong>: Retrieve a specific episode by ID</li>
-        <li><strong>GET /guests</strong>: Retrieve all guests</li>
-        <li><strong>POST /appearances</strong>: Add a new appearance</li>
-    </ul>
+    
     """, 200)
 
 class Episodes(Resource):
