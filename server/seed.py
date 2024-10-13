@@ -4,20 +4,17 @@ from app import app
 
 def seed_database():
     with app.app_context():
-        # Clear existing data
         db.session.query(Appearance).delete()
         db.session.query(Guest).delete()
         db.session.query(Episode).delete()
-        db.session.commit()  # Ensure clearing data is committed
+        db.session.commit() 
 
-        # Open and read the CSV file
         with open('seed.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             
             for row in reader:
-                # Create or get the episode
                 episode_date = row['Show']
-                episode_number = int(episode_date.replace('/', ''))  # Assuming number from date
+                episode_number = int(episode_date.replace('/', ''))  
                 episode = Episode.query.filter_by(date=episode_date).first()
                 
                 if not episode:
@@ -25,7 +22,6 @@ def seed_database():
                     db.session.add(episode)
                     db.session.commit()
 
-                # Create or get the guest
                 guest_name = row['Raw_Guest_List']
                 occupation = row['GoogleKnowlege_Occupation']
                 guest = Guest.query.filter_by(name=guest_name).first()
@@ -35,9 +31,8 @@ def seed_database():
                     db.session.add(guest)
                     db.session.commit()
 
-                # Create an appearance (Assigning a random rating for now)
                 appearance = Appearance(
-                    rating=3,  # You can adjust this logic to randomly assign ratings
+                    rating=3, 
                     episode_id=episode.id,
                     guest_id=guest.id
                 )
