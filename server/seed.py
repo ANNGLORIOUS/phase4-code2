@@ -1,49 +1,67 @@
-import csv
-from models import db, Episode, Guest, Appearance
 from app import app
+from models import db, Episode, Guest, Appearance
+
+
 
 def seed_database():
     with app.app_context():
-        # Clear existing data
+        
         db.session.query(Appearance).delete()
         db.session.query(Guest).delete()
         db.session.query(Episode).delete()
-        db.session.commit()  # Ensure clearing data is committed
+        db.session.commit()  
 
-        # Open and read the CSV file
-        with open('seed.csv', newline='') as csvfile:
-            reader = csv.DictReader(csvfile)
+        
+        episodes_data = [
+            {"date": "2023-01-01", "number": 1},
+            {"date": "2023-01-02", "number": 2},
+            {"date": "2023-01-03", "number": 3},
+            {"date": "2023-01-04", "number": 4},
+            {"date": "2023-01-05", "number": 5},
+            {"date": "2023-01-06", "number": 6},
+            {"date": "2023-01-07", "number": 7},
+            {"date": "2023-01-08", "number": 8},
+            {"date": "2023-01-09", "number": 9},
+            {"date": "2023-01-05", "number": 10},
+        ]
+
+        guests_data = [
+            {"name": "John Doe", "occupation": "Actor"},
+            {"name": "Jane Smith", "occupation": "Musician"},
+            {"name": "Bob Johnson", "occupation": "Comedian"},
+            {"name": "Alice Brown", "occupation": "Author"},
+            {"name": "Charlie Davis", "occupation": "Director"},
+            {"name": "David Wilson", "occupation": "Writer"},
+            {"name": "Emily Thompson", "occupation": "Producer"},
+            {"name": "Michael Lee", "occupation": "Screenwriter"},
+            {"name": "Sarah Johnson", "occupation": "Sound Designer"},
+            {"name": "Jessica Smith", "occupation": "Makeup Artist"},
+        ]
+
+        episodes = []
+        for episode_info in episodes_data:
+            episode = Episode(**episode_info)
+            db.session.add(episode)
+            episodes.append(episode)
+
+        db.session.commit() 
+
+        
+        for guest_info in guests_data:
+            guest = Guest(**guest_info)
+            db.session.add(guest)
+            db.session.commit()  
             
-            for row in reader:
-                # Create or get the episode
-                episode_date = row['Show']
-                episode_number = int(episode_date.replace('/', ''))  # Assuming number from date
-                episode = Episode.query.filter_by(date=episode_date).first()
-                
-                if not episode:
-                    episode = Episode(date=episode_date, number=episode_number)
-                    db.session.add(episode)
-                    db.session.commit()
-
-                # Create or get the guest
-                guest_name = row['Raw_Guest_List']
-                occupation = row['GoogleKnowlege_Occupation']
-                guest = Guest.query.filter_by(name=guest_name).first()
-                
-                if not guest:
-                    guest = Guest(name=guest_name, occupation=occupation)
-                    db.session.add(guest)
-                    db.session.commit()
-
-                # Create an appearance (Assigning a random rating for now)
+            
+            for episode in episodes:
                 appearance = Appearance(
-                    rating=3,  # You can adjust this logic to randomly assign ratings
+                    rating=3, 
                     episode_id=episode.id,
                     guest_id=guest.id
                 )
                 db.session.add(appearance)
-                db.session.commit()
 
+        db.session.commit()  
         print("Database seeded successfully.")
 
 if __name__ == '__main__':
