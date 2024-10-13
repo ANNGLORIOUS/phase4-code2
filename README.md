@@ -1,4 +1,4 @@
-# SA. Week 1 Code Challenge: LATESHOW
+# SA. Week 2 Code Challenge: LATESHOW
 
 #### By **{List of contributors}**
 This project was created and is sole property of Annglorious mueni.
