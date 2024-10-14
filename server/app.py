@@ -22,13 +22,13 @@ def home():
 
 class Episodes(Resource):
     #retrive all episodes in the database and return them as a json response.
-    def get_episodes(self):
+    def get(self):
         episodes = [episode.to_dict() for episode in Episode.query.all()]
         return make_response(jsonify(episodes), 200)
 
 class EpisodeById(Resource):
     #retrieve a specific episode by id from the database and return it as a json response.
-    def get_episodesid(self, id):
+    def get(self, id):
         episode = Episode.query.get(id)
         if episode:
             episode_dict = episode.to_dict()
@@ -39,13 +39,13 @@ class EpisodeById(Resource):
 
 class Guests(Resource):
     #retrive all guests in the database and return them as a json response.
-    def get_guests(self):
+    def get(self):
         guests = [guest.to_dict() for guest in Guest.query.all()]
         return make_response(jsonify(guests), 200)
 
 class Appearances(Resource):
     #add a new appearance to the database and return the new appearance as a json response.
-    def post_appearances(self):
+    def post(self):
         try:
             data = request.get_json()
             new_appearance = Appearance(
@@ -60,7 +60,7 @@ class Appearances(Resource):
             return make_response(jsonify({"errors": [str(e)]}), 400)
 
 #define the endpoints and their corresponding resources.
-api.add_resource(Episodes, '/episodes')
+api.add_resource(Episodes, '/episodes' )
 api.add_resource(EpisodeById, '/episodes/<int:id>')
 api.add_resource(Guests, '/guests')
 api.add_resource(Appearances, '/appearances')
